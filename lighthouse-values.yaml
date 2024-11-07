@@ -1,0 +1,171 @@
+nameOverride: ""
+
+fullnameOverride: ""
+
+replicas: 1
+
+image:
+  repository: sigp/lighthouse
+  tag: latest
+  pullPolicy: IfNotPresent
+
+mode: "beacon"
+
+extraArgs:
+  - --execution-endpoint=http://nethermind.default.svc.cluster.local:8551
+
+jwt: ecb22bc24e7d4061f7ed690ccd5846d7d73f5d2b9733267e12f56790398d908a
+
+checkpointSync:
+  enabled: true
+  url: "https://mainnet.checkpoint.sigp.io"
+
+defaultBeaconCommandTemplate: |
+  - sh
+  - -ac
+  - >
+  {{- if .Values.p2pNodePort.enabled }}
+    . /env/init-nodeport;
+  {{- end }}
+    exec lighthouse
+    beacon_node
+    --datadir=/data
+    --disable-upnp
+    --disable-enr-auto-update
+  {{- if .Values.p2pNodePort.enabled }}
+    {{- if not (contains "--enr-address=" (.Values.extraArgs | join ",")) }}
+    --enr-address=$EXTERNAL_IP
+    {{- end }}
+    {{- if not (contains "--enr-tcp-port=" (.Values.extraArgs | join ",")) }}
+    --enr-tcp-port=$EXTERNAL_PORT
+    {{- end }}
+    {{- if not (contains "--enr-udp-port=" (.Values.extraArgs | join ",")) }}
+    --enr-udp-port=$EXTERNAL_PORT
+    {{- end }}
+  {{- else }}
+    {{- if not (contains "--enr-address=" (.Values.extraArgs | join ",")) }}
+    --enr-address=$(POD_IP)
+    {{- end }}
+    {{- if not (contains "--enr-tcp-port=" (.Values.extraArgs | join ",")) }}
+    --enr-tcp-port={{ include "lighthouse.p2pPort" . }}
+    {{- end }}
+    {{- if not (contains "--enr-udp-port=" (.Values.extraArgs | join ",")) }}
+    --enr-udp-port={{ include "lighthouse.p2pPort" . }}
+    {{- end }}
+  {{- end }}
+    --listen-address=0.0.0.0
+    --port={{ include "lighthouse.p2pPort" . }}
+    --discovery-port={{ include "lighthouse.p2pPort" . }}
+    --http
+    --http-address=0.0.0.0
+    --http-port={{ .Values.httpPort }}
+    --execution-jwt=/data/jwt.hex
+    --metrics
+    --metrics-address=0.0.0.0
+    --metrics-port={{ .Values.metricsPort }}
+  {{- if .Values.checkpointSync.enabled }}
+    --checkpoint-sync-url={{ tpl .Values.checkpointSync.url $ }}
+  {{- else }}
+    --allow-insecure-genesis-sync
+  {{- end }}
+  {{- range .Values.extraArgs }}
+    {{ tpl . $ }}
+  {{- end }}
+
+resources:
+  requests:
+    cpu: "2"
+    memory: "6Gi"
+  limits:
+    cpu: "4"
+    memory: "8Gi"
+
+p2pPort: 9000
+
+httpPort: 5052
+
+metricsPort: 5054
+
+nodeSelector: {}
+
+persistence:
+  enabled: false
+  existingClaim: null
+  accessModes:
+  - ReadWriteOnce
+  size: 20Gi
+  storageClassName: null
+  annotations: {}
+  selector: {}
+
+podLabels: {}
+
+podAnnotations: {}
+
+podManagementPolicy: OrderedReady
+
+priorityClassName: null
+
+rbac:
+  create: true
+  clusterRules:
+    - apiGroups: [""]
+      resources:
+      - "nodes"
+      verbs:
+      - "get"
+      - "list"
+      - "watch"
+  rules:
+    - apiGroups: [""]
+      resources:
+      - "services"
+      verbs:
+      - "get"
+      - "list"
+      - "watch"
+
+securityContext:
+  fsGroup: 10001
+  runAsGroup: 10001
+  runAsNonRoot: true
+  runAsUser: 10001
+
+containerSecurityContext: {}
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+terminationGracePeriodSeconds: 300
+
+tolerations: []
+
+topologySpreadConstraints: []
+
+podDisruptionBudget: {}
+
+updateStrategy:
+  type: RollingUpdate
+
+initChownData:
+  enabled: true
+  image:
+    repository: busybox
+    tag: "1.34.0"
+    pullPolicy: IfNotPresent
+  resources: {}
+
+serviceMonitor:
+  enabled: false
+  path: /metrics
+  namespace: null
+  labels: {}
+  annotations: {}
+  interval: 1m
+  scheme: http
+  tlsConfig: {}
+  scrapeTimeout: 30s
+  relabelings: []
+
