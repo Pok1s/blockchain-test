@@ -20,9 +20,8 @@ jobs:
 
       - name: Install gke-gcloud-auth-plugin
         run: |
-          curl -sSL https://dl.google.com/cloudagents/install-gke-auth-plugin.sh -o install-gke-auth-plugin.sh
-          chmod +x install-gke-auth-plugin.sh
-          ./install-gke-auth-plugin.sh
+          sudo apt-get update -y
+          sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
 
       - name: Configure kubectl
         run: |
