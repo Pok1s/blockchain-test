@@ -1,4 +1,4 @@
-name: Deploy Ethereum Nodes
+name: Deploy Ethereum Light Node
 
 on:
   push:
@@ -20,9 +20,7 @@ jobs:
 
       - name: Install gke-gcloud-auth-plugin
         run: |
-          curl -sSL https://dl.google.com/dl/cloudsdk/channels/rapid/install_google_cloud_sdk.bash | bash
-          source $HOME/google-cloud-sdk/path.bash.inc
-          gcloud components install gke-gcloud-auth-plugin
+          curl -sSL https://dl.google.com/cloudagents/install-gke-auth-plugin.sh | bash
 
       - name: Configure kubectl
         run: |
