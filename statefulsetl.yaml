@@ -187,7 +187,7 @@ spec:
   {{- else if .Values.persistence.existingClaim }}
         - name: storage
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim }}
+            claimName: storage-lighthouse-0
   {{- else }}
   volumeClaimTemplates:
   - metadata:
