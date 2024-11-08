@@ -35,6 +35,15 @@ jobs:
           kubectl apply -f pv-nethermind.yaml
           kubectl apply -f pv-lighthouse.yaml
 
+      - name: Apply PVCs for Nethermind and Lighthouse
+        run: |
+          kubectl apply -f pvc-lighthouse-nethermind.yaml
+
+      - name: Apply StatefulSets for Nethermind and Lighthouse
+        run: |
+          kubectl apply -f statefulsetn.yaml
+          kubectl apply -f statefulsetl.yaml
+
       - name: Deploy Nethermind
         run: |
           helm upgrade --install nethermind ethereum-helm-charts/nethermind -f nethermind-values.yaml -n default
