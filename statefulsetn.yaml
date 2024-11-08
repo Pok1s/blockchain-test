@@ -92,7 +92,7 @@ spec:
         {{- if .Values.persistence.existingClaim }}
         - name: storage
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim }}
+            claimName: storage-nethermind-0
         {{- else }}
         volumeClaimTemplates:
         - metadata:
