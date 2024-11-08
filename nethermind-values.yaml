@@ -119,7 +119,7 @@ metricsPort: 9546
 nodeSelector: {}
 
 persistence:
-  enabled: true
+  enabled: false
   existingClaim: storage-nethermind-0
   accessModes:
     - ReadWriteOnce
