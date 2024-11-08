@@ -125,7 +125,6 @@ persistence:
     - ReadWriteOnce
   size: 900Gi
   storageClassName: "hdd-standard"
-  storageClassName: null
   annotations: {}
   selector: {}
 
