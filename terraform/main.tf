@@ -41,7 +41,7 @@ resource "google_container_node_pool" "primary_nodes" {
       "https://www.googleapis.com/auth/monitoring",
       "https://www.googleapis.com/auth/devstorage.read_only"
     ]
-    machine_type = "e2-standard-8"
+    machine_type = "e2-standard-16"
     disk_size_gb = 250
     labels = {
       env = "blockchain"
