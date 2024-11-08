@@ -76,6 +76,12 @@ ingress:
       paths: []
   tls: []
 
+p2pPort: 30303
+httpPort: 8545
+wsPort: 8546
+authPort: 8551
+metricsPort: 9545 
+
 persistence:
   enabled: false
 
