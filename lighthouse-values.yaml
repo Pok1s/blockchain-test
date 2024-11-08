@@ -3,7 +3,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 replicas: 1
-
+#new
 image:
   repository: sigp/lighthouse
   tag: latest
