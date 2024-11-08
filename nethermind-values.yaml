@@ -124,7 +124,7 @@ persistence:
   accessModes:
     - ReadWriteOnce
   size: 900Gi
-  storageClassName: "standard"
+  storageClassName: "pd-standard"
   storageClassName: null
   annotations: {}
   selector: {}
