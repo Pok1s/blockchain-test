@@ -88,30 +88,25 @@ spec:
         - name: jwt
           secret:
             secretName: {{ include "nethermind.fullname" . }}-jwt
-      {{- if .Values.persistence.enabled }}
-        {{- if .Values.persistence.existingClaim }}
         - name: storage
           persistentVolumeClaim:
             claimName: storage-nethermind-0
-        {{- else }}
-        volumeClaimTemplates:
-        - metadata:
-            name: storage
-            annotations:
-              {{- toYaml .Values.persistence.annotations | nindent 8 }}
-          spec:
-            accessModes:
-              {{- toYaml .Values.persistence.accessModes | nindent 8 }}
-            resources:
-              requests:
-                storage: {{ .Values.persistence.size | quote }}
-            storageClassName: {{ .Values.persistence.storageClassName }}
-            {{- if .Values.persistence.selector }}
-            selector:
-              {{- toYaml .Values.persistence.selector | nindent 8 }}
-            {{- end }}
+
+  {{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: storage
+        annotations:
+          {{- toYaml .Values.persistence.annotations | nindent 8 }}
+      spec:
+        accessModes:
+          {{- toYaml .Values.persistence.accessModes | nindent 8 }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
+        storageClassName: {{ .Values.persistence.storageClassName }}
+        {{- if .Values.persistence.selector }}
+        selector:
+          {{- toYaml .Values.persistence.selector | nindent 8 }}
         {{- end }}
-      {{- else }}
-        - name: storage
-          emptyDir: {}
-      {{- end }}
+  {{- end }}
