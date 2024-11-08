@@ -64,9 +64,21 @@ defaultCommandTemplate: |
     {{ tpl . $ }}
   {{- end }}
 
+customCommand: []
+
 p2pNodePort:
   enabled: false
   port: 31000
+  initContainer:
+    image:
+      repository: lachlanevenson/k8s-kubectl
+      tag: v1.25.4
+      pullPolicy: IfNotPresent
+  portForwardContainer:
+    image:
+      repository: alpine/socat
+      tag: latest
+      pullPolicy: IfNotPresent
 
 ingress:
   enabled: false
@@ -76,14 +88,72 @@ ingress:
       paths: []
   tls: []
 
+affinity: {}
+
+imagePullSecrets: []
+
+annotations: {}
+
+livenessProbe:
+  tcpSocket:
+    port: http-rpc
+  initialDelaySeconds: 60
+  periodSeconds: 120
+
+readinessProbe:
+  tcpSocket:
+    port: http-rpc
+  initialDelaySeconds: 10
+  periodSeconds: 10
+
 p2pPort: 30303
+
 httpPort: 8545
+
 wsPort: 8546
+
 authPort: 8551
-metricsPort: 9545 
+
+metricsPort: 9546
+
+nodeSelector: {}
 
 persistence:
-  enabled: false
+  enabled: true
+  existingClaim: null
+  accessModes:
+    - ReadWriteOnce
+  size: 900Gi
+  storageClassName: null
+  annotations: {}
+  selector: {}
+
+podLabels: {}
+
+podAnnotations: {}
+
+podManagementPolicy: OrderedReady
+
+priorityClassName: null
+
+rbac:
+  create: true
+  clusterRules:
+    - apiGroups: [""]
+      resources:
+        - "nodes"
+      verbs:
+        - "get"
+        - "list"
+        - "watch"
+  rules:
+    - apiGroups: [""]
+      resources:
+        - "services"
+      verbs:
+        - "get"
+        - "list"
+        - "watch"
 
 resources:
   limits:
@@ -99,11 +169,54 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 10001
 
+containerSecurityContext: {}
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
 terminationGracePeriodSeconds: 300
+
+tolerations: []
+
+topologySpreadConstraints: []
+
+podDisruptionBudget: {}
+
+updateStrategy:
+  type: RollingUpdate
+
+initContainers: []
+
+extraContainers: []
+
+extraVolumes: []
+
+extraVolumeMounts: []
+
+extraPorts: []
+
+extraEnv: []
+
+secretEnv: {}
+
+initChownData:
+  enabled: true
+  image:
+    repository: busybox
+    tag: "1.34.0"
+    pullPolicy: IfNotPresent
+  resources: {}
 
 serviceMonitor:
   enabled: false
   path: /metrics
+  namespace: null
+  labels: {}
+  annotations: {}
   interval: 1m
   scheme: http
+  tlsConfig: {}
   scrapeTimeout: 30s
+  relabelings: []
