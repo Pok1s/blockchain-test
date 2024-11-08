@@ -120,7 +120,7 @@ nodeSelector: {}
 
 persistence:
   enabled: true
-  existingClaim: "pvc-5ebc5f5b-1b47-4a0f-9e7f-f0eb803687ba"
+  existingClaim: storage-nethermind-0
   accessModes:
     - ReadWriteOnce
   size: 1024Gi
