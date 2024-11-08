@@ -89,14 +89,13 @@ metricsPort: 5054
 nodeSelector: {}
 
 persistence:
-  enabled: false
+  enabled: true
   existingClaim: null
   accessModes:
-  - ReadWriteOnce
-  size: 20Gi
-  storageClassName: null
+    - ReadWriteOnce
+  size: 1024Gi
+  storageClassName: "standard"
   annotations: {}
-  selector: {}
 
 podLabels: {}
 
@@ -168,4 +167,3 @@ serviceMonitor:
   tlsConfig: {}
   scrapeTimeout: 30s
   relabelings: []
-
