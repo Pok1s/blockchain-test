@@ -11,6 +11,9 @@ image:
 
 extraArgs:
   - --Sync.FastBlocks=true
+  - --Pruning.Mode=Full
+  - --Pruning.FullPruningCompletionBehavior=Continue
+  - --Pruning.FullPruningMemoryBudgetMb=4096
 
 jwt: ecb22bc24e7d4061f7ed690ccd5846d7d73f5d2b9733267e12f56790398d908a
 
@@ -116,12 +119,12 @@ metricsPort: 9546
 nodeSelector: {}
 
 persistence:
-  enabled: false
+  enabled: true
   existingClaim: null
   accessModes:
   - ReadWriteOnce
-  size: 20Gi
-  storageClassName: null
+  size: 1024Gi
+  storageClassName: "standard"
   annotations: {}
   selector: {}
 
