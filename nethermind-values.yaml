@@ -124,6 +124,7 @@ persistence:
   accessModes:
     - ReadWriteOnce
   size: 900Gi
+  storageClassName: "standard"
   storageClassName: null
   annotations: {}
   selector: {}
