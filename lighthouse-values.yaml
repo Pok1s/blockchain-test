@@ -90,7 +90,7 @@ nodeSelector: {}
 
 persistence:
   enabled: true
-  existingClaim: null
+  existingClaim: "pvc-83d91a74-103b-4594-aea5-a2ba7977bf6b"
   accessModes:
     - ReadWriteOnce
   size: 1024Gi
