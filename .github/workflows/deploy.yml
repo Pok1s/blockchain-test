@@ -29,10 +29,6 @@ jobs:
         run: |
           helm repo add ethereum-helm-charts https://ethpandaops.github.io/ethereum-helm-charts
           helm repo update
-
-      - name: Add PVC
-        run: |
-          kubectl apply -f hdd-storageclass.yaml
           
       - name: Deploy Nethermind
         run: |
