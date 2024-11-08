@@ -30,15 +30,6 @@ jobs:
           helm repo add ethereum-helm-charts https://ethpandaops.github.io/ethereum-helm-charts
           helm repo update
 
-      - name: Apply Persistent Volumes for Nethermind and Lighthouse
-        run: |
-          kubectl apply -f pv-nethermind.yaml
-          kubectl apply -f pv-lighthouse.yaml
-
-      - name: Apply PVCs for Nethermind and Lighthouse
-        run: |
-          kubectl apply -f pvc-lighthouse-nethermind.yaml
-
       - name: Deploy Nethermind
         run: |
           helm upgrade --install nethermind ethereum-helm-charts/nethermind -f nethermind-values.yaml -n default
