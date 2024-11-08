@@ -89,7 +89,7 @@ metricsPort: 5054
 nodeSelector: {}
 
 persistence:
-  enabled: true
+  enabled: false
   existingClaim: storage-lighthouse-0
   accessModes:
     - ReadWriteOnce
